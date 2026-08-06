@@ -1,9 +1,4 @@
-from openai import OpenAI
-
-client = OpenAI(
-    base_url='http://localhost:11434/v1',
-    api_key='ollama'
-)
+from llm import client, LLM_MODEL
 
 def generate_answer_with_citations(query: str, retrieved_chunks: list):
     context_text = ""
@@ -22,7 +17,7 @@ def generate_answer_with_citations(query: str, retrieved_chunks: list):
     user_prompt = f"Context:\n{context_text}\n\nQuestion: {query}"
     
     response = client.chat.completions.create(
-        model="llama3",
+        model=LLM_MODEL,
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt}

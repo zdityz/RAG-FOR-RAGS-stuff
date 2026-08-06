@@ -6,11 +6,13 @@ from sentence_transformers import CrossEncoder
 DB_PATH = "./chroma_db"
 COLLECTION_NAME = "pdf_chunks"
 
+embedding_fn = embedding_functions.SentenceTransformerEmbeddingFunction(
+    model_name="all-MiniLM-L6-v2"
+)
+cross_encoder_model = CrossEncoder('cross-encoder/ms-marco-MiniLM-L-6-v2')
+
 def get_chroma_collection():
     client = chromadb.PersistentClient(path=DB_PATH)
-    embedding_fn = embedding_functions.SentenceTransformerEmbeddingFunction(
-        model_name="all-MiniLM-L6-v2"
-    )
     return client.get_collection(name=COLLECTION_NAME, embedding_function=embedding_fn)
 
 def vector_search(query: str, top_k: int = 5):
@@ -81,9 +83,8 @@ def hybrid_search(query: str, top_k: int = 5, rrf_k: int = 60):
     return final_results
 
 def rerank_results(query: str, results: list, top_k: int = 3):
-    model = CrossEncoder('cross-encoder/ms-marco-MiniLM-L-6-v2')
     cross_inp = [[query, res["text"]] for res in results]
-    scores = model.predict(cross_inp)
+    scores = cross_encoder_model.predict(cross_inp)
     
     for i in range(len(scores)):
         results[i]["cross_score"] = float(scores[i])
