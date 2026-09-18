@@ -1,4 +1,4 @@
-from llm import client, LLM_MODEL
+from ..llm import client, LLM_MODEL
 
 def generate_answer_with_citations(query: str, retrieved_chunks: list):
     context_text = ""

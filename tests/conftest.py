@@ -9,10 +9,11 @@ def mock_collection(tmp_path):
     collection.add(
         documents=[
             "RAG stands for Retrieval-Augmented Generation, combining retrieval with LLMs.",
-            "BM25 is a bag-of-words retrieval function that ranks a set of documents."
+            "BM25 is a bag-of-words retrieval function that ranks a set of documents.",
+            "This is a third dummy document to ensure BM25 IDF scores are strictly positive."
         ],
-        metadatas=[{"source": "doc1.pdf", "page": 1}, {"source": "doc2.pdf", "page": 2}],
-        ids=["id1", "id2"]
+        metadatas=[{"source": "doc1.pdf", "page": 1}, {"source": "doc2.pdf", "page": 2}, {"source": "doc3.pdf", "page": 3}],
+        ids=["id1", "id2", "id3"]
     )
     return collection
 

@@ -26,7 +26,7 @@ class BM25IndexCache:
         Call this after you ingest new documents.
         """
         collection = get_collection()
-        data = collection.get(include=["documents", "metadatas", "ids"])
+        data = collection.get(include=["documents", "metadatas"])
         cls._docs = data["documents"]
         cls._ids = data["ids"]
         cls._metas = data["metadatas"]

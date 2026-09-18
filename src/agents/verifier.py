@@ -1,4 +1,4 @@
-from llm import client, LLM_MODEL
+from ..llm import client, LLM_MODEL
 
 def verify_answer(query: str, answer: str, retrieved_chunks: list):
     context_text = ""

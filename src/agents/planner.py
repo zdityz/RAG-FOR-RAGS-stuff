@@ -1,4 +1,4 @@
-from llm import client, LLM_MODEL
+from ..llm import client, LLM_MODEL
 
 def generate_sub_queries(query: str):
     system_prompt = (
