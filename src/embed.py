@@ -1,21 +1,8 @@
-import chromadb
-from chromadb.utils import embedding_functions
+from src.db import get_collection
+from src.config import settings
+from src.logger import get_logger
 
-DB_PATH = "./chroma_db"
-COLLECTION_NAME = "pdf_chunks"
-
-def get_collection():
-    client = chromadb.PersistentClient(path=DB_PATH)
-    embedding_fn = embedding_functions.SentenceTransformerEmbeddingFunction(
-        model_name="all-MiniLM-L6-v2"
-    )
-    
-    collection = client.get_or_create_collection(
-        name=COLLECTION_NAME,
-        embedding_function=embedding_fn,
-        metadata={"hnsw:space": "cosine"}
-    )
-    return collection
+logger = get_logger(__name__)
 
 def store_chunks(chunks):
     collection = get_collection()
@@ -29,4 +16,4 @@ def store_chunks(chunks):
         documents=documents,
         metadatas=metadatas
     )
-    print(f"Successfully indexed {len(chunks)} chunks into ChromaDB at '{DB_PATH}'.")
+    logger.info(f"Successfully indexed {len(chunks)} chunks into ChromaDB at '{settings.db_path}'.")

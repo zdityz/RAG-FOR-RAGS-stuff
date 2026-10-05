@@ -7,17 +7,18 @@ This script:
 3. Extracts raw text from each PDF via :func:`extract_text_from_pdf`.
 4. Splits the text into semantic chunks using the BGE embedding model.
 5. Stores the chunks in ChromaDB.
-6. Rebuilds the BM25 cache.
+6. Re‑builds the BM25 cache.
 
 Run it from the project root:
-    python scripts/reingest.py
+    source .venv/bin/activate && python scripts/reingest.py
 """
 import shutil
 from pathlib import Path
-
-# Project imports – ensure the repo root is in PYTHONPATH
 import sys
-sys.path.append(str(Path(__file__).parents[2]))
+
+# Ensure the project root (the directory containing `src/`) is on PYTHONPATH
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+sys.path.append(str(PROJECT_ROOT))
 
 from src.config import settings
 from src.embed import store_chunks
@@ -33,7 +34,7 @@ def main() -> None:
     db_path.mkdir(parents=True, exist_ok=True)
 
     # 2️⃣ Locate PDF sources
-    data_dir = Path(__file__).parents[2] / "data"
+    data_dir = PROJECT_ROOT / "data"
     pdf_files = list(data_dir.rglob("*.pdf"))
     if not pdf_files:
         print(f"No PDF files found in {data_dir}. Add PDFs and re‑run.")

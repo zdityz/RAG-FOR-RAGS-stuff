@@ -1,5 +1,6 @@
 import fitz
-from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_experimental.text_splitter import SemanticChunker
+from langchain_huggingface import HuggingFaceEmbeddings
 
 def extract_text_from_pdf(pdf_path: str):
     doc = fitz.open(pdf_path)
@@ -15,16 +16,14 @@ def extract_text_from_pdf(pdf_path: str):
             })
     return pages_data
 
-def chunk_documents(pages_data, doc_name="document", chunk_size=500, chunk_overlap=50):
-    splitter = RecursiveCharacterTextSplitter(
-        chunk_size=chunk_size,
-        chunk_overlap=chunk_overlap,
-        length_function=len,
-        separators=["\n\n", "\n", " ", ""]
-    )
+def chunk_documents(pages_data, doc_name="document"):
+    embeddings = HuggingFaceEmbeddings(model_name="BAAI/bge-base-en-v1.5")
+    splitter = SemanticChunker(embeddings)
     
     chunks = []
     for item in pages_data:
+        # SemanticChunker expects a list of documents or texts. 
+        # We can split individual page texts.
         split_texts = splitter.split_text(item["text"])
         
         for idx, text in enumerate(split_texts):

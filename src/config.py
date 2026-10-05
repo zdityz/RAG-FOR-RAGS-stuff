@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     llm_model: str = Field(default="llama3", env="LLM_MODEL")
 
     # ChromaDB configuration
-    db_path: str = Field(default=str(Path(__file__).parents[2] / "chroma_db"), env="CHROMA_DB_PATH")
+    db_path: str = Field(default=str(Path(__file__).resolve().parent.parent / "chroma_db"), env="CHROMA_DB_PATH")
     collection_name: str = Field(default="pdf_chunks", env="CHROMA_COLLECTION_NAME")
 
     # Retrieval parameters
