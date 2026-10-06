@@ -10,3 +10,4 @@ openai
 rank-bm25
 pydantic-settings
 python-dotenv
+python-multipart
