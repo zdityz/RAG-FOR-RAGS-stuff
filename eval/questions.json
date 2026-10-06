@@ -1,0 +1,27 @@
+[
+  {
+    "question": "What are the course outcomes related to the data link layer?",
+    "expected_answer": "Identify and analyze error and flow control mechanisms in data link layer.",
+    "relevant_pages": [2]
+  },
+  {
+    "question": "Which models are covered in Module 1 for Network Models?",
+    "expected_answer": "OSI and TCP/IP models.",
+    "relevant_pages": [3]
+  },
+  {
+    "question": "What topics are discussed under Network Topology in Module 1?",
+    "expected_answer": "Line configuration and Data Flow.",
+    "relevant_pages": [3]
+  },
+  {
+    "question": "What is the course code for Computer Networks?",
+    "expected_answer": "BCSE308L",
+    "relevant_pages": [1]
+  },
+  {
+    "question": "According to the course outcomes, what should students be able to do regarding the transport layer?",
+    "expected_answer": "Compare various congestion control mechanisms and identify appropriate transport layer protocol for real time applications with appropriate security mechanism.",
+    "relevant_pages": [2]
+  }
+]
