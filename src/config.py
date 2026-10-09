@@ -1,31 +1,34 @@
 from pathlib import Path
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import Field
 
 class Settings(BaseSettings):
     # LLM configuration
-    llm_base_url: str = Field(default="http://localhost:11434/v1", env="LLM_BASE_URL")
-    llm_api_key: str = Field(default="ollama", env="LLM_API_KEY")
-    llm_model: str = Field(default="llama3", env="LLM_MODEL")
+    llm_base_url: str = Field(default="http://localhost:11434/v1", validation_alias="LLM_BASE_URL")
+    llm_api_key: str = Field(default="ollama", validation_alias="LLM_API_KEY")
+    llm_model: str = Field(default="llama3", validation_alias="LLM_MODEL")
 
     # ChromaDB configuration
-    db_path: str = Field(default=str(Path(__file__).resolve().parent.parent / "chroma_db"), env="CHROMA_DB_PATH")
-    collection_name: str = Field(default="pdf_chunks", env="CHROMA_COLLECTION_NAME")
+    db_path: str = Field(default=str(Path(__file__).resolve().parent.parent / "chroma_db"), validation_alias="CHROMA_DB_PATH")
+    collection_name: str = Field(default="pdf_chunks", validation_alias="CHROMA_COLLECTION_NAME")
 
     # Retrieval parameters
-    retrieval_top_k: int = Field(default=5, env="RETRIEVAL_TOP_K")
-    rerank_top_k: int = Field(default=5, env="RERANK_TOP_K")
-    retrieve_k: int = Field(default=10, env="RETRIEVE_K")
+    retrieval_top_k: int = Field(default=5, validation_alias="RETRIEVAL_TOP_K")
+    rerank_top_k: int = Field(default=5, validation_alias="RERANK_TOP_K")
+    retrieve_k: int = Field(default=10, validation_alias="RETRIEVE_K")
 
     # Authentication
-    api_key: str = Field(default="super-secret-token", env="API_KEY")
+    api_key: str = Field(default="super-secret-token", validation_alias="API_KEY")
 
     # Logging
-    log_level: str = Field(default="INFO", env="LOG_LEVEL")
+    log_level: str = Field(default="INFO", validation_alias="LOG_LEVEL")
 
-    class Config:
-        env_file = ".env"
-        env_file_encoding = "utf-8"
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore"
+    )
 
 # Export a singleton for easy import
 settings = Settings()
+
