@@ -64,6 +64,18 @@ async function handleSend() {
     isGenerating = true;
     sendBtn.disabled = true;
 
+    // Cycle waiting messages to keep UI feeling alive during slow local inference
+    let loadingTimer = setInterval(() => {
+        if (statusEl.style.display === "none") {
+            clearInterval(loadingTimer);
+            return;
+        }
+        const msgs = ["Reading documents...", "Analyzing context...", "Synthesizing answer...", "Cross-referencing...", "Almost there..."];
+        if (statusEl.textContent.includes("passages") || statusEl.textContent.includes("...")) {
+             statusEl.innerHTML = msgs[Math.floor(Math.random() * msgs.length)];
+        }
+    }, 3500);
+
     try {
         const response = await fetch("/query/stream", {
             method: "POST",
@@ -106,12 +118,14 @@ async function handleSend() {
                     if (data.stage === "retrieving") statusEl.textContent = `Found ${data.chunks_found} relevant passages...`;
                 }
                 else if (eventType === "token") {
+                    clearInterval(loadingTimer);
                     statusEl.style.display = "none";
                     rawText += data.token;
                     contentEl.innerHTML = marked.parse(rawText);
                     scrollToBottom();
                 }
                 else if (eventType === "done") {
+                    clearInterval(loadingTimer);
                     // Verification
                     metaEl.style.display = "flex";
                     if (data.verified) {
@@ -138,13 +152,21 @@ async function handleSend() {
                             sourcesList.appendChild(sc);
                         });
                     }
+                    
+                    // Latency
+                    if (data.stage_latencies_ms) {
+                        latencyEl.innerHTML = `⏱️ ${data.stage_latencies_ms.total}ms total`;
+                    }
+                    
                     scrollToBottom();
                 }
             }
         }
     } catch (e) {
+        clearInterval(loadingTimer);
         msgEl.querySelector(".content").innerHTML = `<span style="color:var(--danger)">Connection failed. Check API key and server.</span>`;
     } finally {
+        clearInterval(loadingTimer);
         isGenerating = false;
         sendBtn.disabled = false;
         chatInput.focus();

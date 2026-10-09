@@ -267,10 +267,34 @@ h1, h2, h3, h4 { font-family: 'Outfit', sans-serif; }
 
 /* Status, Meta, Sources */
 .status-indicator {
-    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
     color: var(--accent);
-    margin-bottom: 8px;
-    font-style: italic;
+    margin-bottom: 12px;
+    font-weight: 500;
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+.status-indicator::before {
+    content: '';
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--accent);
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
 }
 
 .meta-footer {
