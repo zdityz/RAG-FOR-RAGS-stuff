@@ -202,3 +202,17 @@ def list_sessions():
 @app.get("/health")
 def health():
     return {"status": "ok", "version": app.version}
+
+
+# ---------------------------------------------------------------------------
+# Frontend (Static Files)
+# ---------------------------------------------------------------------------
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+
+static_dir = Path(__file__).parent / "static"
+app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
+
+@app.get("/")
+def serve_frontend():
+    return FileResponse(str(static_dir / "index.html"))

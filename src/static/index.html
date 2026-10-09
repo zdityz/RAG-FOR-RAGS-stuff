@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG Copilot</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+    <!-- Markdown Parser -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>RAG Copilot</h2>
+                <div class="badge">v2.0</div>
+            </div>
+
+            <!-- API Key input (temporary for UI, sets Bearer token) -->
+            <div class="api-key-section">
+                <input type="password" id="api-key-input" placeholder="Enter API Key" value="super-secret-token">
+            </div>
+
+            <div class="section-title">Knowledge Base</div>
+            
+            <div class="upload-zone" id="upload-zone">
+                <div class="upload-icon">📄</div>
+                <p>Drag & drop PDF / TXT / MD<br><span>or click to browse</span></p>
+                <input type="file" id="file-input" accept=".pdf,.txt,.md" hidden>
+            </div>
+            
+            <div class="upload-progress" id="upload-progress" style="display: none;">
+                Uploading & Ingesting...
+            </div>
+
+            <div class="document-list" id="document-list">
+                <!-- Documents will be injected here -->
+            </div>
+
+            <div class="spacer"></div>
+            
+            <button class="btn btn-outline" id="btn-new-chat">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                New Chat Session
+            </button>
+        </aside>
+
+        <!-- Main Chat Area -->
+        <main class="chat-area">
+            <header class="chat-header">
+                <div class="model-info">
+                    <span class="status-dot"></span>
+                    <span id="connection-status">Connected to RAG API</span>
+                </div>
+            </header>
+
+            <div class="chat-history" id="chat-history">
+                <!-- Welcome Message -->
+                <div class="message assistant-message">
+                    <div class="avatar">🤖</div>
+                    <div class="content">
+                        Hello! I am your RAG Copilot. Upload some documents on the left, then ask me anything about them.
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input-container">
+                <div class="input-wrapper">
+                    <textarea id="chat-input" placeholder="Ask a question about your documents..." rows="1"></textarea>
+                    <button id="send-btn" title="Send">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                    </button>
+                </div>
+                <div class="input-footer">
+                    Answers are AI-generated and verified against the uploaded knowledge base.
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Templates for dynamic elements -->
+    <template id="tpl-user-msg">
+        <div class="message user-message">
+            <div class="avatar">👤</div>
+            <div class="content"></div>
+        </div>
+    </template>
+    
+    <template id="tpl-assistant-msg">
+        <div class="message assistant-message">
+            <div class="avatar">🤖</div>
+            <div class="content-wrapper">
+                <!-- Status pill (planning/retrieving...) -->
+                <div class="status-indicator">Thinking...</div>
+                
+                <div class="content markdown-body"></div>
+                
+                <!-- Verification & Latency -->
+                <div class="meta-footer" style="display: none;">
+                    <div class="verification-badge"></div>
+                    <div class="latency-metrics"></div>
+                </div>
+                
+                <!-- Sources -->
+                <div class="sources-container" style="display: none;">
+                    <h4>Sources</h4>
+                    <div class="sources-list"></div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
